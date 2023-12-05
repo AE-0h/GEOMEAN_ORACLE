@@ -38,18 +38,10 @@ contract GeomeanOracleTest {
     uint32 public time;
 
     uint160 public constant SQRT_RATIO_1_1 = 79228162514264337593543950336;
+    int24 public constant MAX_TICK_SPACING = type(int16).max;
     uint256 constant MAX_DEADLINE = 12329839823;
     int24 constant TICK_SPACING = 60;
     bytes internal constant ZERO_BYTES = bytes("");
-
-    event Initialize(
-        PoolId indexed poolId,
-        Currency indexed currency0,
-        Currency indexed currency1,
-        uint24 fee,
-        int24 tickSpacing,
-        IHooks hooks
-    );
 
     constructor(address _manager) {
         manager = _manager;
@@ -84,7 +76,7 @@ contract GeomeanOracleTest {
         );
 
         setTime(1);
-        poolKey = PoolKey(currency0, currency1, 0, TICK_SPACING, hook);
+        poolKey = PoolKey(currency0, currency1, 0, MAX_TICK_SPACING, hook);
         poolId = poolKey.toId();
 
         modifyPositionRouter = new PoolModifyPositionTest(
